@@ -1,0 +1,18 @@
+.selector-wrapper {
+  width: 150px;
+  border: 1px solid black;
+  /* margin: auto; */
+}
+
+.selector li {
+  list-style: none;
+}
+
+.selector li:hover {
+  background-color: aqua;
+}
+
+.selector-wrapper > * {
+  margin: 0;
+  padding: 0;
+}

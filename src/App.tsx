@@ -1,55 +1,22 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './App.css';
+import { pictures } from './components/Pictures/Picture'
+import {Selector} from './components/Selector/Selector'
 
-const purple: Location = {
-  name: 'Purps',
-  xStart: 1895,
-  xEnd: 1915,
-  yStart: 400,
-  yEnd: 420,
-};
+const didHit = (x:number ,y: number, guess: string ): boolean => {
+  // return if somehow not in the dict
+  if (pictures[guess] === undefined) {
+    console.error("Guess Doesn't Exist");
+    return false;
+  }
+  const picture = pictures[guess];
 
-const yellow: Location = {
-  name: 'Yellow',
-  xStart: 0,
-  xEnd: 20,
-  yStart: 200,
-  yEnd: 220,
-}
+  if ((y >= picture.yStart && y <= picture.yEnd) && (x >= picture.xStart && x <= picture.xEnd)) {
+        console.log(`hit the box! ${picture.name}`);
+        return true;
+  }
 
-
-const onMouse = (e: React.MouseEvent<HTMLElement>, guess: string) => {
-  console.log(e.clientX, e.clientY);
-  const [x, y] = [e.clientX, e.clientY];
-  // const picture = pictures['Purps'];
-
-  console.log(didHit(x,y));
-
-  // pictures.forEach(picture => {
-    // if ((y >= picture.yStart && y <= picture.yEnd) && (x >= picture.xStart && x <= picture.xEnd)) {
-    //   console.log(`hit the box! ${picture.name}`);
-    // } else {
-    //   console.log('miss');
-    // }
-  // })
-};
-
-const didHit = (x:number ,y: number ): boolean => {
-  let flag = false;
-  pictures.forEach(picture => {
-    if ((y >= picture.yStart && y <= picture.yEnd) && (x >= picture.xStart && x <= picture.xEnd)) {
-      console.log(`hit the box! ${picture.name}`);
-      flag = true;
-    }
-  });
-  // for (let i = 0; i < pictures.length; i++) {
-  //   const picture = pictures[i]
-  //   if ((y >= picture.yStart && y <= picture.yEnd) && (x >= picture.xStart && x <= picture.xEnd)) {
-  //     console.log(`hit the box! ${picture.name}`);
-  //     return true;
-  //   }
-  // }
-  return flag;
+  return false;
 }
 
 interface Props {
@@ -57,25 +24,6 @@ interface Props {
   width?: string;
   extra?: {} | undefined
 }
-
-type Location = {
-  name: string,
-  xStart: number,
-  xEnd: number,
-  yStart: number,
-  yEnd: number,
-}
-
-// probably needs to be an array unless they have to click "who" they're guessing
-// const pictures = {
-//   Purps: purple,
-//   Yellow: yellow,
-// }
-const pictures: Location[] = [
-  purple,
-  yellow,
-]
-
 
 const Box: React.FC<Props> = ({ color, width = '100%', extra, children }) => {
   let style = {
@@ -98,17 +46,45 @@ const Box: React.FC<Props> = ({ color, width = '100%', extra, children }) => {
   );
 };
 
-const App: React.FC = () => (
-  <div className="App" onClick={(e) => onMouse(e, 'Purps')}>
-    <Box color="red" />
-    <Box color="blue">
-      <Box color="yellow" width="20px" extra={{ height: '20px' }} />
-    </Box>
+const App: React.FC = () => {
+  const [ clicked, setClick ] = useState<boolean>(false)
+  const [ clickedCoordinates, setClickedCoordinates ] = useState<number[]>([0,0])
 
-    <Box color="green">
-      <Box color="purple" width="20px" extra={{ float: 'right', height: '20px' }} />
-    </Box>
-  </div>
-);
+
+  const onMouse = (guess: string) => {
+    // console.log(e.clientX, e.clientY);
+    // const [x, y] = [e.clientX, e.clientY];
+    const [ x, y ] = clickedCoordinates; 
+    console.log(didHit(x,y, guess));
+    setClickedCoordinates([0,0]);
+  };
+
+  const openDropdown = (e: React.MouseEvent<HTMLElement>) => {
+    setClick(clicked => !clicked)
+    const [x, y] = [e.clientX, e.clientY];
+    setClickedCoordinates([x, y]);
+  }
+
+  return (
+    <div
+      className="App"
+      // onClick={(e) => onMouse(e, 'Purple')}
+      onClick={openDropdown}
+    >
+      <Box color="red" />
+      <Box color="blue">
+        <Box color="yellow" width="20px" extra={{ height: '20px' }} />
+      </Box>
+
+      <Box color="green">
+        <Box color="purple" width="20px" extra={{ float: 'right', height: '20px' }} />
+      </Box>
+      {clicked && <Selector
+        list={pictures}
+        onMouse={onMouse}
+      />}
+    </div>
+  )
+};
 
 export default App;
