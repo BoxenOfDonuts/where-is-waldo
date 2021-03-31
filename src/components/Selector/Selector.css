@@ -6,6 +6,8 @@
 
 .selector li {
   list-style: none;
+  background-color: white;
+  padding: 5px 0;
 }
 
 .selector li:hover {

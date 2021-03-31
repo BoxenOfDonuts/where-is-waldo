@@ -49,7 +49,7 @@ const Box: React.FC<Props> = ({ color, width = '100%', extra, children }) => {
 const App: React.FC = () => {
   const [ clicked, setClick ] = useState<boolean>(false)
   const [ clickedCoordinates, setClickedCoordinates ] = useState<number[]>([0,0])
-
+  
 
   const onMouse = (guess: string) => {
     // console.log(e.clientX, e.clientY);
@@ -59,10 +59,20 @@ const App: React.FC = () => {
     setClickedCoordinates([0,0]);
   };
 
+  // const setPosition = (x: number, y: number): number[] => {
+  //   const width = document.body.clientWidth;
+  //   const height = document.body.clientHeight;
+  //   if (x + 155 > width) {
+  //     x = width - 155;
+  //   }
+  //   return [x, y];
+  // }
+
   const openDropdown = (e: React.MouseEvent<HTMLElement>) => {
     setClick(clicked => !clicked)
-    const [x, y] = [e.clientX, e.clientY];
-    setClickedCoordinates([x, y]);
+    // const [x, y] = setPosition(e.clientX ,e.clientY);
+    // setDropdownCoordinates([x, y])
+    setClickedCoordinates([e.clientX, e.clientY]);
   }
 
   return (
@@ -70,19 +80,22 @@ const App: React.FC = () => {
       className="App"
       // onClick={(e) => onMouse(e, 'Purple')}
       onClick={openDropdown}
+      style={{position:'relative'}}
     >
-      <Box color="red" />
-      <Box color="blue">
-        <Box color="yellow" width="20px" extra={{ height: '20px' }} />
-      </Box>
-
-      <Box color="green">
-        <Box color="purple" width="20px" extra={{ float: 'right', height: '20px' }} />
-      </Box>
       {clicked && <Selector
         list={pictures}
         onMouse={onMouse}
+        location={clickedCoordinates}
       />}
+      <Box color="red">
+        <Box color="orange" width="20px" extra={{ height: '20px', marginLeft: '50px' }} />
+      </Box>
+      <Box color="blue">
+        <Box color="yellow" width="20px" extra={{ height: '20px' }} />
+      </Box>
+      <Box color="green">
+        <Box color="purple" width="20px" extra={{ float: 'right', height: '20px' }} />
+      </Box>
     </div>
   )
 };
