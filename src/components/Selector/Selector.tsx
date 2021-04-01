@@ -1,4 +1,4 @@
-import { Location, LocationDict } from '../Pictures/Picture.types';
+import { LocationDict } from '../Pictures/Picture.types';
 import { CSSProperties, useEffect, useState } from 'react';
 import './Selector.css';
 
