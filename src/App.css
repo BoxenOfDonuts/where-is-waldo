@@ -3,6 +3,10 @@
   margin: 0;
 }
 
+:root {
+  --nav-size: 50px;
+}
+
 .App {
   text-align: center;
 }
