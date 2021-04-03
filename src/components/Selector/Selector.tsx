@@ -37,11 +37,16 @@ export const Selector: React.FC<SelectorProps> = ({ list, onMouse, location }) =
     zIndex: 1,
   }
 
-  const content = Object.keys(list).map(value => {
+  const dropdownItems = Object.keys(list).map(value => {
     const name = list[value].name
+    let classname =  "picture-name"
+    classname = list[value].found
+     ?  classname += ' found-picture'
+     : classname
+    
     return (
       <li
-        className="picture-name"
+        className={classname}
         onClick={() => onMouse(name)}
       >
         {name}
@@ -52,7 +57,7 @@ export const Selector: React.FC<SelectorProps> = ({ list, onMouse, location }) =
   return (
     <div className="selector-wrapper" style={style}>
       <ul className="selector">
-        {content}
+        {dropdownItems}
       </ul>
     </div>
   );

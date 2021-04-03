@@ -4,6 +4,7 @@ type Location = Readonly<{
   xEnd: number,
   yStart: number,
   yEnd: number,
+  found: boolean,
 }>
 
 type LocationDict = {

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 // import { pictures } from '../Pictures/Picture';
 import { LocationDict } from '../Pictures/Picture.types';
 import { Selector } from '../Selector/Selector';
@@ -34,9 +34,10 @@ const Box: React.FC<Props> = ({ color, width = '100%', extra, children }) => {
 
 interface AppProps {
   pictures: LocationDict;
+  updateInventory: (item: string) => void
 }
 
-export const PictureArea: React.FC<AppProps> = ({ pictures }) => {
+export const PictureArea: React.FC<AppProps> = ({ pictures, updateInventory }) => {
   const [ clicked, setClick ] = useState<boolean>(false)
   const [ clickedCoordinates, setClickedCoordinates ] = useState<number[]>([0,0])
   
@@ -47,12 +48,13 @@ export const PictureArea: React.FC<AppProps> = ({ pictures }) => {
       return false;
     }
     const picture = pictures[guess];
-  
+    
     if ((y >= picture.yStart && y <= picture.yEnd) && (x >= picture.xStart && x <= picture.xEnd)) {
-          console.log(`hit the box! ${picture.name}`);
-          return true;
+      console.log(`hit the box! ${picture.name}`);
+        // return true;
+        updateInventory(picture.name);
+        return true;
     }
-  
     return false;
   }
 

@@ -6,7 +6,8 @@ const Picture = (name: string, yStart: number, yEnd:number, xStart:number, xEnd:
     yStart,
     yEnd,
     xStart,
-    xEnd
+    xEnd,
+    found: false,
   }
   
   return {
