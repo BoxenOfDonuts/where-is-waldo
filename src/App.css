@@ -5,6 +5,10 @@
 
 :root {
   --nav-size: 50px;
+  --nav-color: #333;
+  --border: 1px solid #474a4d;
+  --speed: 300ms;
+  --border-radius: 4px;
 }
 
 .App {

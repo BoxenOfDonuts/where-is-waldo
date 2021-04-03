@@ -1,13 +1,15 @@
-import React, { ReactElement, useState } from 'react'
+import React, { ReactElement, useEffect, useState } from 'react'
 import { LocationDict } from '../Pictures/Picture.types';
+import { pictures } from '../Pictures/Picture';
+
 import './Header.css';
 
 interface HeaderProps {
   title: string;
-  pictures: LocationDict
+  pictures?: LocationDict
 }
 
-export const Header: React.FC<HeaderProps> = ({title, pictures}) => {
+export const Header: React.FC<HeaderProps> = ({title}) => {
   const navClassName = 'nav-item';
 
   return (
@@ -18,7 +20,7 @@ export const Header: React.FC<HeaderProps> = ({title, pictures}) => {
         <NavItem buttonName={'Content'}>
           <DropDownMenu />
         </NavItem>
-        </ul>
+      </ul>
     </nav>
   );
 }
@@ -31,41 +33,59 @@ interface NavItemProps {
 export const NavItem: React.FC<NavItemProps> = ({ buttonName, children }) => {
   const [ open, setOpen ] = useState(false);
 
-  // const content = Object.keys(pictures).map(value => {
-  //   const name = pictures[value].name
-  //   return (
-  //     <li
-  //       className="nav-item"
-  //     >
-  //       {name}
-  //     </li>)
-      
-  // })
+  const closeDropdown = () => {
+    setOpen(!open)
+  }
 
-    return (
-      <li
-        className="nav-item"
-        onClick={() => setOpen(!open)}
-      >
+  return (
+    <li
+      className="nav-item"
+      onClick={() => setOpen(!open)}
+    >
+      <div className='icon-name' >
         {buttonName}
-        {open && children}
-      </li>
-    );
+      </div>
+      {open && children}
+    </li>
+  );
 }
 
 
 
 interface DropDownMenuProps {
-
+  children?: React.ReactNode
+  closeDropdown?: any;
 }
 
-export const DropDownMenu: React.FC<DropDownMenuProps> = ({children}) => {
-  const DropDownItem(children) = {
-    // handle each picture here?
-  }
+export const DropDownMenu: React.FC<DropDownMenuProps> = ({}) => {
+  const items = Object.keys(pictures).map(value => {
+    const name = pictures[value].name;
     return (
-      <div className="dropdown-item">
-        {children}
-      </div>
+      <DropDownItem key={name} >
+        {name}
+      </DropDownItem>
     );
+  })
+
+  useEffect(() =>{
+    console.log('mounted')
+
+    return () => {
+      console.log('unmounted')
+    }
+  })
+
+  return (
+    <div className="dropdown">
+      {items}
+    </div>
+  );
+}
+
+const DropDownItem: React.FC<DropDownMenuProps> = ({children}) => {
+  return (
+    <div className='dropdown-item'>
+      {children}
+    </div>
+  );
 }

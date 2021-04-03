@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 // import { pictures } from '../Pictures/Picture';
 import { LocationDict } from '../Pictures/Picture.types';
 import { Selector } from '../Selector/Selector';
@@ -7,6 +7,7 @@ interface Props {
   color: string;
   width?: string;
   extra?: {} | undefined
+  children?: React.ReactNode
 }
 
 const Box: React.FC<Props> = ({ color, width = '100%', extra, children }) => {
