@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 // import { pictures } from '../Pictures/Picture';
 import { LocationDict } from '../Pictures/Picture.types';
 import { Selector } from '../Selector/Selector';
