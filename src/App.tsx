@@ -24,7 +24,7 @@ const App: React.FC = () => {
     <div className="App">
       {/* not sure pictures are needed to be passed to the header */}
       {/* <PictureContext.Provider value={[inventory, setInventory]} > */}
-        <Header title={"Where Is Waldo"} pictures={pictures} />
+        <Header title={"Where Is Waldo"} pictures={inventory} />
         <PictureArea pictures={inventory} updateInventory={updateInventory} />
       {/* </PictureContext.Provider> */}
     </div>

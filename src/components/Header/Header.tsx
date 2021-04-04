@@ -1,33 +1,27 @@
-import React, { ReactElement, useEffect, useState } from 'react'
-import { LocationDict } from '../Pictures/Picture.types';
-import { pictures } from '../Pictures/Picture';
-
+import React, { useEffect, useState } from 'react'
+import { HeaderProps, NavItemProps, DropDownMenuProps, DropDownItemProps } from './Header.types';
 import './Header.css';
 
-interface HeaderProps {
-  title: string;
-  pictures?: LocationDict
-}
-
-export const Header: React.FC<HeaderProps> = ({title}) => {
-  const navClassName = 'nav-item';
-
+export const Header: React.FC<HeaderProps> = ({title, pictures}) => {
+  const [ count, setCount ] = useState<number>(Object.keys(pictures).length);
+  useEffect(() => {
+    const remaining = Object.keys(pictures).reduce((accum, value): number => {
+      if (!pictures[value].found) return accum +1;
+      return accum + 0;
+    }, 0);
+    setCount(remaining);
+  }, [pictures])
+  
   return (
     <nav className="navbar">
       <ul className={"navbar-nav"}>
-        <NavItem buttonName={'Counter'}/>
-        <NavItem buttonName={'HOME'}/>
-        <NavItem buttonName={'Content'}>
-          <DropDownMenu />
+        <NavItem buttonName={'Home'}/>
+        <NavItem buttonName={`Remaining ${count}`}>
+          <DropDownMenu pictures={pictures} />
         </NavItem>
       </ul>
     </nav>
   );
-}
-
-
-interface NavItemProps {
-  buttonName: string;
 }
 
 export const NavItem: React.FC<NavItemProps> = ({ buttonName, children }) => {
@@ -50,18 +44,12 @@ export const NavItem: React.FC<NavItemProps> = ({ buttonName, children }) => {
   );
 }
 
-
-
-interface DropDownMenuProps {
-  children?: React.ReactNode
-  closeDropdown?: any;
-}
-
-export const DropDownMenu: React.FC<DropDownMenuProps> = ({}) => {
+export const DropDownMenu: React.FC<DropDownMenuProps> = ({ pictures }) => {
   const items = Object.keys(pictures).map(value => {
     const name = pictures[value].name;
+    const found = pictures[value].found;
     return (
-      <DropDownItem key={name} >
+      <DropDownItem key={name} found={found} >
         {name}
       </DropDownItem>
     );
@@ -82,9 +70,11 @@ export const DropDownMenu: React.FC<DropDownMenuProps> = ({}) => {
   );
 }
 
-const DropDownItem: React.FC<DropDownMenuProps> = ({children}) => {
+const DropDownItem: React.FC<DropDownItemProps> = ({children, found}) => {
+  let classname = 'dropdown-item';
+  classname = found ? classname += ' found-picture': classname;
   return (
-    <div className='dropdown-item'>
+    <div className={classname}>
       {children}
     </div>
   );
