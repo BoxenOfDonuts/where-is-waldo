@@ -2,15 +2,16 @@
   text-decoration: none;
   padding: 18px 20px;
   color: white;
-  cursor: pointer;
   font-family: Helvetica,Arial,sans-serif;
   display: flex;
   align-items: center;
   justify-content: center;
-  /* padding: 5px; */
-  /* margin: 2px; */
   transition: background var(--speed);
   background-color: var(--nav-color);
+}
+
+.nav-item.clickable {
+  cursor: pointer;
 }
 
 .nav-item:hover {
