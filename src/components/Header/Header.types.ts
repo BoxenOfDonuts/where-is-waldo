@@ -6,7 +6,8 @@ interface HeaderProps {
 }
 
 interface NavItemProps {
-  buttonName: string;
+  buttonName: string | number;
+  classes?: string[];
 }
 
 interface DropDownMenuProps {
@@ -19,6 +20,8 @@ interface DropDownMenuProps {
 interface DropDownItemProps {
   children?: React.ReactNode;
   found? : boolean;
+  leftIcon?: any
+  rightIcon?: any
 }
 
 export type { HeaderProps, NavItemProps, DropDownMenuProps, DropDownItemProps}

@@ -1,9 +1,21 @@
 import React, { useEffect, useState } from 'react'
+import { useStopwatch } from '../../hooks/Stopwatch';
 import { HeaderProps, NavItemProps, DropDownMenuProps, DropDownItemProps } from './Header.types';
+import { StopwatchValue } from '../../hooks/Stopwatch.types';
 import './Header.css';
 
 export const Header: React.FC<HeaderProps> = ({title, pictures}) => {
   const [ count, setCount ] = useState<number>(Object.keys(pictures).length);
+  const [ gameOver, setGameOver ] = useState<boolean>(false);
+  const [ time, formattedTime ] = useStopwatch(0, 1000, gameOver);
+
+  useEffect(() => {
+    if (count === 0) {
+      setGameOver(true);
+    }
+  }, [count])
+
+
   useEffect(() => {
     const remaining = Object.keys(pictures).reduce((accum, value): number => {
       if (!pictures[value].found) return accum +1;
@@ -11,12 +23,15 @@ export const Header: React.FC<HeaderProps> = ({title, pictures}) => {
     }, 0);
     setCount(remaining);
   }, [pictures])
+
+
   
   return (
     <nav className="navbar">
       <ul className={"navbar-nav"}>
-        <NavItem buttonName={'Home'}/>
-        <NavItem buttonName={`Remaining ${count}`}>
+        {/* <Timer /> */}
+        <NavItem buttonName={formattedTime} />
+        <NavItem buttonName={`Remaining ${count}`} classes={['clickable']}>
           <DropDownMenu pictures={pictures} />
         </NavItem>
       </ul>
@@ -24,19 +39,24 @@ export const Header: React.FC<HeaderProps> = ({title, pictures}) => {
   );
 }
 
-export const NavItem: React.FC<NavItemProps> = ({ buttonName, children }) => {
+export const NavItem: React.FC<NavItemProps> = ({ buttonName, children, classes }) => {
   const [ open, setOpen ] = useState(false);
 
   const closeDropdown = () => {
     setOpen(!open)
   }
 
+  let clasname = 'nav-item ';
+  if (classes) {
+    clasname = [...classes, clasname].join(' ');
+  }
+
   return (
     <li
-      className="nav-item"
+      className={clasname}
       onClick={() => setOpen(!open)}
     >
-      <div className='icon-name' >
+      <div className={''} >
         {buttonName}
       </div>
       {open && children}
@@ -70,12 +90,25 @@ export const DropDownMenu: React.FC<DropDownMenuProps> = ({ pictures }) => {
   );
 }
 
-const DropDownItem: React.FC<DropDownItemProps> = ({children, found}) => {
+const DropDownItem: React.FC<DropDownItemProps> = ({children, found, leftIcon, rightIcon}) => {
   let classname = 'dropdown-item';
   classname = found ? classname += ' found-picture': classname;
   return (
     <div className={classname}>
-      {children}
+      {leftIcon && <span className="left-icon">{leftIcon}</span>}
+        {children}
+      {rightIcon && <span className="right-icon">{rightIcon}</span>}
     </div>
+  );
+}
+
+const Timer: React.FC = () => {
+  // const [ time, formattedTime ] = useStopwatch(0, 1000);
+  const [ time, formattedTime ] = useStopwatch(0, 1000, false);
+
+  return (
+    <>
+      <NavItem buttonName={formattedTime}/>
+    </>
   );
 }

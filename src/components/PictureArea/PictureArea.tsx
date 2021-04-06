@@ -1,14 +1,8 @@
 import React, { useState } from 'react';
 // import { pictures } from '../Pictures/Picture';
-import { LocationDict } from '../Pictures/Picture.types';
 import { Selector } from '../Selector/Selector';
+import { AppProps, Props } from './PictureArea.types';
 
-interface Props {
-  color: string;
-  width?: string;
-  extra?: {} | undefined
-  children?: React.ReactNode
-}
 
 const Box: React.FC<Props> = ({ color, width = '100%', extra, children }) => {
   let style = {
@@ -30,12 +24,6 @@ const Box: React.FC<Props> = ({ color, width = '100%', extra, children }) => {
     </div>
   );
 };
-
-
-interface AppProps {
-  pictures: LocationDict;
-  updateInventory: (item: string) => void
-}
 
 export const PictureArea: React.FC<AppProps> = ({ pictures, updateInventory }) => {
   const [ clicked, setClick ] = useState<boolean>(false)
