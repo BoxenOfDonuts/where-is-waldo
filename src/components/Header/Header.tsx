@@ -1,20 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import { useStopwatch } from '../../hooks/Stopwatch';
 import { HeaderProps, NavItemProps, DropDownMenuProps, DropDownItemProps } from './Header.types';
-import { StopwatchValue } from '../../hooks/Stopwatch.types';
 import './Header.css';
 
-export const Header: React.FC<HeaderProps> = ({title, pictures}) => {
+export const Header: React.FC<HeaderProps> = ({title, pictures, stopwatch}) => {
   const [ count, setCount ] = useState<number>(Object.keys(pictures).length);
-  const [ gameOver, setGameOver ] = useState<boolean>(false);
-  const [ time, formattedTime ] = useStopwatch(0, 1000, gameOver);
-
-  useEffect(() => {
-    if (count === 0) {
-      setGameOver(true);
-    }
-  }, [count])
-
 
   useEffect(() => {
     const remaining = Object.keys(pictures).reduce((accum, value): number => {
@@ -24,13 +14,11 @@ export const Header: React.FC<HeaderProps> = ({title, pictures}) => {
     setCount(remaining);
   }, [pictures])
 
-
-  
   return (
     <nav className="navbar">
       <ul className={"navbar-nav"}>
         {/* <Timer /> */}
-        <NavItem buttonName={formattedTime} />
+        <NavItem buttonName={stopwatch} />
         <NavItem buttonName={`Remaining ${count}`} classes={['clickable']}>
           <DropDownMenu pictures={pictures} />
         </NavItem>

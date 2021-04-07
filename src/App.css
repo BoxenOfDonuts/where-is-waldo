@@ -20,6 +20,12 @@
   pointer-events: none;
 }
 
+input {
+  max-width: 20px;
+  text-align: center;
+  font-weight: bolder;
+}
+
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
     animation: App-logo-spin infinite 20s linear;
