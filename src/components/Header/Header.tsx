@@ -90,13 +90,13 @@ const DropDownItem: React.FC<DropDownItemProps> = ({children, found, leftIcon, r
   );
 }
 
-const Timer: React.FC = () => {
-  // const [ time, formattedTime ] = useStopwatch(0, 1000);
-  const [ time, formattedTime ] = useStopwatch(0, 1000, false);
+// const Timer: React.FC = () => {
+//   // const [ time, formattedTime ] = useStopwatch(0, 1000);
+//   const [ time, formattedTime ] = useStopwatch(0, 1000, false);
 
-  return (
-    <>
-      <NavItem buttonName={formattedTime}/>
-    </>
-  );
-}
+//   return (
+//     <>
+//       <NavItem buttonName={formattedTime}/>
+//     </>
+//   );
+// }

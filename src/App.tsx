@@ -3,18 +3,19 @@ import { Header } from './components/Header/Header';
 import { pictures } from './components/Pictures/Picture';
 import { PictureArea } from './components/PictureArea/PictureArea';
 import { useStopwatch } from './hooks/Stopwatch';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import { Overlay } from './components/Overlay/Overlay';
 
 // const PictureContext = React.createContext([inventory, setInventory]);
 
 const App: React.FC = () => {
   const [ inventory, setInventory ] = useState(pictures);
   const [ gameOver, setGameOver ] = useState<boolean>(false);
-  const [ time, formattedTime ] = useStopwatch(0, 1000, gameOver);
+  const [ gameCount, setGameCount ] = useState<number>(0)
+  const [ time, formattedTime ] = useStopwatch(0, 1000, gameOver, gameCount);
 
   useEffect(() => {
     const remaining = Object.keys(inventory).reduce((accum, value): number => {
-      console.log(accum)
       if (!inventory[value].found) return accum +1;
       return accum + 0;
     }, 0);
@@ -34,72 +35,26 @@ const App: React.FC = () => {
     })
   }
 
+  const resetGame = () => {
+    setInventory(pictures);
+    setGameOver(false);
+    setGameCount(gameCount + 1)
+  }
+
   return (
-    <div className="App">
+    <div className="App" style={{position: 'relative'}}>
         <Header
           title={"Where Is Waldo"}
           pictures={inventory}
           stopwatch={formattedTime}
         />
-        {false &&<PictureArea
+        {true &&<PictureArea
           pictures={inventory}
           updateInventory={updateInventory}
         />}
-        <Overlay time={formattedTime} />
+      {gameOver && <Overlay time={formattedTime} resetGame={resetGame}/>}
     </div>
   )
 };
-
-interface TimeProps {
-  time: string;
-}
-
-const Overlay: React.FC<TimeProps> = ({ time }): JSX.Element => {
-  const value = 'A';
-
-  const autoTab = (): void => {
-    // todo
-  }
-  
-  return (
-    <div className="popup-wrapper">
-      <p>{"Game Over!"}</p>
-      <p>{`Time Taken: ${time}`}</p>
-      <Input autoTab={autoTab} InitialValue={value} />
-      <Input InitialValue={value} />
-      <Input InitialValue={value} />
-    </div>
-  );
-}
-
-const Input: React.FC<any> = ({ InitialValue, autoTab }): JSX.Element => {
-  const [ valueDict, setValueDict ] = useState<{value: string, updated: boolean}>({ value: InitialValue, updated: false})
-
-  const blankValue = () => {
-    if (valueDict.value === InitialValue && !valueDict.updated ) {
-      setValueDict({
-        value: '',
-        updated: true,
-      });
-    }
-    return;
-  }
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const {value} = e.target;
-    setValueDict({...valueDict, value,});
-  }
-
-  return (
-    <input type="text"
-      value={valueDict.value}
-      maxLength={1}
-      onClick={blankValue}
-      onFocus={blankValue}
-      onChange={handleChange}
-      onKeyUp={autoTab}
-    />
-  );
-}
 
 export default App;

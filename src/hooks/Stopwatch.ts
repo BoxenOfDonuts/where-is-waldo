@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 
-const useStopwatch = ( initial: number, tickRate: number, stop: boolean): [number, string] => {
+const useStopwatch = ( initial: number, tickRate: number, stop: boolean, gameCount: number): [number, string] => {
+
+  
   const [ time, setTime ] = useState(initial);
 
   const formatTime = (): string => {
@@ -32,7 +34,13 @@ const useStopwatch = ( initial: number, tickRate: number, stop: boolean): [numbe
       stopTimer()
     }
 
-  },[stop])
+  }, [stop])
+
+  useEffect(() =>{
+    if(gameCount > 0) {
+      setTime(0);
+    }
+  }, [gameCount])
 
   const timeString = formatTime();
 
