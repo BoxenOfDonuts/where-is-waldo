@@ -1,5 +1,3 @@
-import { RecordWithTtl } from "node:dns";
-import { type } from "node:os";
 import React, { useState } from "react";
 
 interface OverlayProps {
@@ -16,12 +14,6 @@ const Overlay: React.FC<OverlayProps> = ({ time, resetGame }): JSX.Element => {
           <p>{"Game Over!"}</p>
           <p>{`Time Taken: ${time}`}</p>
           <Form />
-          {/* <form onSubmit={submitName}>
-            <Input autoTab={autoTab} InitialValue={InitialValue} />
-            <Input autoTab={autoTab} InitialValue={InitialValue} />
-            <Input autoTab={autoTab} InitialValue={InitialValue} />
-            <button>{'Submit'}</button><br/>
-          </form> */}
           <button onClick={resetGame}>{'Play Again?'}</button>
         </div>
       </div>
@@ -29,15 +21,14 @@ const Overlay: React.FC<OverlayProps> = ({ time, resetGame }): JSX.Element => {
   );
 }
 
-const Form: React.FC = () => {
+const Form: React.FC = (): JSX.Element => {
   const InitialValue = 'A';
-  const [ initials, setInitials ] = useState(['A', 'A', 'A']);
+  const [ initials, setInitials ] = useState<string[]>(['A', 'A', 'A']);
+  const [ didSubmit, setDidSubmit ] = useState<Boolean>(false)
 
   // cant get typescript to work here :(
   const autoTab = (e: any) => {
     const regex = new RegExp('^[A-Za-z]$');
-    // const { key }: {key: string} = e;
-    // const { currentTarget }: { currentTarget: HTMLElement} = e;
     const { key, currentTarget} = e;
     if (!regex.test(key)) return;
     if (currentTarget.nextElementSibling) {
@@ -47,8 +38,8 @@ const Form: React.FC = () => {
 
   const submitName = (e: any) => {
     e.preventDefault();
-    const target: HTMLFormElement = e.target;
-    console.log(target.elements)
+    console.log(initials.join(''))
+    setDidSubmit(true);
   }
 
   const handleChange = (key: number, value: string) => {
@@ -58,12 +49,14 @@ const Form: React.FC = () => {
     setInitials(newInitials);
   }
 
+  const action = didSubmit ? 'Play Again!': 'Submit'
+
   return (
     <form onSubmit={submitName}>
       <Input autoTab={autoTab} handleChange={handleChange} initialKey={0} InitialValue={InitialValue} />
-      {/* <Input autoTab={autoTab} key={1} InitialValue={InitialValue} />
-      <Input autoTab={autoTab} key={2} InitialValue={InitialValue} /> */}
-      <button>{'Submit'}</button><br/>
+      <Input autoTab={autoTab} handleChange={handleChange} initialKey={1} InitialValue={InitialValue} />
+      <Input autoTab={autoTab} handleChange={handleChange} initialKey={2} InitialValue={InitialValue} />
+      <button>{action}</button><br/>
     </form>
   );
 }
@@ -81,18 +74,9 @@ const Input: React.FC<any> = ({ InitialValue, autoTab, initialKey, handleChange 
     return;
   }
 
-  // const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   const {value} = e.target;
-  //   setValueDict({...valueDict, value,});
-  //   isPropertySignature.
-  // }
-
-
-
   return (
     <input type="text"
-      // value={'A'}
-      maxLength={3}
+      maxLength={1}
       onClick={blankValue}
       onFocus={blankValue}
       onChange={(e) => handleChange(initialKey, e.target.value)}
