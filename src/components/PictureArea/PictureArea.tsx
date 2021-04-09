@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 // import { pictures } from '../Pictures/Picture';
 import { Selector } from '../Selector/Selector';
 import { AppProps, Props } from './PictureArea.types';
+import Image from '../../Images/waldo_beach.jpg';
+import './PictureArea.css';
 
 
 const Box: React.FC<Props> = ({ color, width = '100%', extra, children }) => {
@@ -47,9 +49,9 @@ export const PictureArea: React.FC<AppProps> = ({ pictures, updateInventory }) =
   }
 
   const onMouse = (guess: string) => {
-    // console.log(e.clientX, e.clientY);
     // const [x, y] = [e.clientX, e.clientY];
     const [ x, y ] = clickedCoordinates; 
+    console.log(x, y);
     console.log(didHit(x,y, guess));
     setClickedCoordinates([0,0]);
   };
@@ -68,7 +70,7 @@ export const PictureArea: React.FC<AppProps> = ({ pictures, updateInventory }) =
 
   return (
     <div
-      className="picture-area"
+      className="image-container"
       onClick={openDropdown}
       style={{position:'relative'}}
     >
@@ -77,7 +79,8 @@ export const PictureArea: React.FC<AppProps> = ({ pictures, updateInventory }) =
       onMouse={onMouse}
       location={clickedCoordinates}
     />}
-    <Box color="red">
+      <img src={Image} alt={'where is waldo'} />
+    {/* <Box color="red">
       <Box color="orange" width="20px" extra={{ height: '20px', marginLeft: '50px' }} />
     </Box>
     <Box color="blue">
@@ -85,7 +88,7 @@ export const PictureArea: React.FC<AppProps> = ({ pictures, updateInventory }) =
     </Box>
     <Box color="green">
       <Box color="purple" width="20px" extra={{ float: 'right', height: '20px' }} />
-    </Box>
+    </Box> */}
   </div>
   );
 }

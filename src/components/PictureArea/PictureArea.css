@@ -1,0 +1,13 @@
+img {
+  max-height: 1000px;
+  object-fit: cover;
+}
+
+.image-container {
+  padding-top: 15px;
+}
+
+.App {
+  background-color:#CFD8DC;
+  height: 100vh;
+}

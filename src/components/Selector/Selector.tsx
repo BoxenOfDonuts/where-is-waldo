@@ -18,10 +18,9 @@ export const Selector: React.FC<SelectorProps> = ({ list, onMouse, location }) =
     // const height = document.body.clientHeight;
     if (x + 155 > width) {
       x = width - 155;
-    }
+    }  
     return [x, y];
   }
-
   
   useEffect(() => {
     console.log('render')

@@ -3,7 +3,7 @@ import { Header } from './components/Header/Header';
 import { pictures } from './components/Pictures/Picture';
 import { PictureArea } from './components/PictureArea/PictureArea';
 import { useStopwatch } from './hooks/Stopwatch';
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Overlay } from './components/Overlay/Overlay';
 
 // const PictureContext = React.createContext([inventory, setInventory]);
@@ -52,7 +52,7 @@ const App: React.FC = () => {
           pictures={inventory}
           updateInventory={updateInventory}
         />}
-      {gameOver && <Overlay time={formattedTime} resetGame={resetGame}/>}
+      {gameOver && <Overlay time={time} resetGame={resetGame}/>}
     </div>
   )
 };
