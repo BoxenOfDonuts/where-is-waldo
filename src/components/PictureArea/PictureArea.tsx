@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 // import { pictures } from '../Pictures/Picture';
 import { Selector } from '../Selector/Selector';
 import { AppProps, Props } from './PictureArea.types';
-import Image from '../../Images/waldo_beach.jpg';
+import Image from '../../Images/beach_waldo.png'
 import './PictureArea.css';
 
 
@@ -80,16 +80,8 @@ export const PictureArea: React.FC<AppProps> = ({ pictures, updateInventory }) =
       location={clickedCoordinates}
     />}
       <img src={Image} alt={'where is waldo'} />
-    {/* <Box color="red">
-      <Box color="orange" width="20px" extra={{ height: '20px', marginLeft: '50px' }} />
-    </Box>
-    <Box color="blue">
-      <Box color="yellow" width="20px" extra={{ height: '20px' }} />
-    </Box>
-    <Box color="green">
-      <Box color="purple" width="20px" extra={{ float: 'right', height: '20px' }} />
-    </Box> */}
   </div>
+
   );
 }
 
