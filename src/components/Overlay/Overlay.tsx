@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import './Overlay.css';
 
 interface OverlayProps {
   time: number|string;
