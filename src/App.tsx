@@ -5,6 +5,7 @@ import { PictureArea } from './components/PictureArea/PictureArea';
 import { useStopwatch } from './hooks/Stopwatch';
 import React, { useState, useEffect } from 'react';
 import { Overlay } from './components/Overlay/Overlay';
+import { FirebaseUtils } from './helpers/FirebaseUtils';
 
 // const PictureContext = React.createContext([inventory, setInventory]);
 
@@ -53,6 +54,7 @@ const App: React.FC = () => {
           updateInventory={updateInventory}
         />}
       {gameOver && <Overlay time={time} resetGame={resetGame}/>}
+      <button onClick={() => FirebaseUtils.signIn()}>HI</button>
     </div>
   )
 };

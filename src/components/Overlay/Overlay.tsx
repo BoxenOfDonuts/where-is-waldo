@@ -37,7 +37,8 @@ const Form: React.FC = (): JSX.Element => {
 
   return (
     <form onSubmit={submitName}>
-      <Input handleChange={handleChange} initialKey={0} InitialValue={name} />
+      <label htmlFor={"name"}></label>
+      <Input handleChange={handleChange} initialKey={0} InitialValue={name} id={"name"} />
     </form>
   );
 }
