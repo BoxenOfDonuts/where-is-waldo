@@ -28,6 +28,7 @@ const Form: React.FC = (): JSX.Element => {
 
   const submitName = (e: any) => {
     e.preventDefault();
+    
     setDidSubmit(true);
   }
 

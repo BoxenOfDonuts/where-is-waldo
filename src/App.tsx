@@ -16,6 +16,11 @@ const App: React.FC = () => {
   const [ time, formattedTime ] = useStopwatch(0, 1000, gameOver, gameCount);
 
   useEffect(() => {
+    // sign in
+    FirebaseUtils.signIn()
+  }, [])
+
+  useEffect(() => {
     const remaining = Object.keys(inventory).reduce((accum, value): number => {
       if (!inventory[value].found) return accum +1;
       return accum + 0;
@@ -42,6 +47,14 @@ const App: React.FC = () => {
     setGameCount(gameCount + 1)
   }
 
+  const doTest = async () => {
+    const user = await FirebaseUtils.Test();
+    // user?.forEach(doc => {
+    //   console.log(doc.data())
+    // })
+    console.log(user)
+  }
+
   return (
     <div className="App" style={{position: 'relative'}}>
         <Header
@@ -54,7 +67,8 @@ const App: React.FC = () => {
           updateInventory={updateInventory}
         />}
       {gameOver && <Overlay time={time} resetGame={resetGame}/>}
-      <button onClick={() => FirebaseUtils.signIn()}>HI</button>
+      <button onClick={() => console.log(FirebaseUtils.onNameSubmit('Joel', 0))}>HI</button>
+      <button onClick={doTest}>Test</button>
     </div>
   )
 };
