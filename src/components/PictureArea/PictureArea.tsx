@@ -27,7 +27,7 @@ const Box: React.FC<Props> = ({ color, width = '100%', extra, children }) => {
   );
 };
 
-export const PictureArea: React.FC<AppProps> = ({ pictures, updateInventory }) => {
+export const PictureArea: React.FC<AppProps> = React.memo(({ pictures, updateInventory }) => {
   const [ clicked, setClick ] = useState<boolean>(false)
   const [ clickedCoordinates, setClickedCoordinates ] = useState<number[]>([0,0])
   
@@ -83,6 +83,6 @@ export const PictureArea: React.FC<AppProps> = ({ pictures, updateInventory }) =
   </div>
 
   );
-}
+})
 
 export default PictureArea;

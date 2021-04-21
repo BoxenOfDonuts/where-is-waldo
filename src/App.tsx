@@ -47,15 +47,21 @@ const App: React.FC = () => {
     setGameCount(gameCount + 1)
   }
 
-  const doTest = async () => {
-    const user = await FirebaseUtils.Test();
+  const getUserId = async () => {
+    const user = await FirebaseUtils.getUserId();
     // user?.forEach(doc => {
     //   console.log(doc.data())
     // })
     console.log(user)
   }
 
+  const submitHighScore = async (name: string, score: number) => {
+    const userId = await FirebaseUtils.getUserId()
+    const r = await FirebaseUtils.onNameSubmit('Joel', 9, userId)
+  }
+
   return (
+    <>
     <div className="App" style={{position: 'relative'}}>
         <Header
           title={"Where Is Waldo"}
@@ -67,9 +73,10 @@ const App: React.FC = () => {
           updateInventory={updateInventory}
         />}
       {gameOver && <Overlay time={time} resetGame={resetGame}/>}
-      <button onClick={() => console.log(FirebaseUtils.onNameSubmit('Joel', 0))}>HI</button>
-      <button onClick={doTest}>Test</button>
     </div>
+      <button onClick={() => submitHighScore('Joel', 0)}>High Score</button>
+      <button onClick={getUserId}>GetUserId</button>
+    </>
   )
 };
 

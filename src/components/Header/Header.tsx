@@ -52,7 +52,7 @@ export const NavItem: React.FC<NavItemProps> = ({ buttonName, children, classes 
   );
 }
 
-export const DropDownMenu: React.FC<DropDownMenuProps> = ({ pictures }) => {
+export const DropDownMenu: React.FC<DropDownMenuProps> = React.memo(({ pictures }) => {
   const items = Object.keys(pictures).map(value => {
     const name = pictures[value].name;
     const found = pictures[value].found;
@@ -76,7 +76,7 @@ export const DropDownMenu: React.FC<DropDownMenuProps> = ({ pictures }) => {
       {items}
     </div>
   );
-}
+})
 
 const DropDownItem: React.FC<DropDownItemProps> = ({children, found, leftIcon, rightIcon}) => {
   let classname = 'dropdown-item';

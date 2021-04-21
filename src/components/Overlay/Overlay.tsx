@@ -15,18 +15,14 @@ interface FormProps {
 }
 
 const Overlay: React.FC<OverlayProps> = ({ time, resetGame }): JSX.Element => {
-  const formRef = useRef<HTMLFormElement>(null);
+  const formRef = useRef<HTMLFormElement>();
 
-  const handleFormSubmit = async () => {
+  const handleFormSubmit = () => {
     console.log('clicking stuff here')
-    const {current} = formRef;
-    console.log(current)
-    if (formRef.current) {
-      console.log(formRef.current.name)
-      const name = formRef.current.name;
-      const userId = FirebaseUtils.getUserId();
-      const r = await FirebaseUtils.onNameSubmit(name, time, userId);
-      console.log(r);
+    let name = formRef.current ? formRef.current : 'anonymous'
+    const userId = FirebaseUtils.getUserId();
+    if (FirebaseUtils.onNameSubmit(name, time, userId)) {
+      resetGame();
     }
   }
 
@@ -46,26 +42,13 @@ const Overlay: React.FC<OverlayProps> = ({ time, resetGame }): JSX.Element => {
 
 const Form: React.FC<FormProps> = ({ time, resetGame, childRef }): JSX.Element => {
   const [ name, setName ] = useState<string>('');
-  const [ didSubmit, setDidSubmit ] = useState<Boolean>(false)
 
   useEffect(() => {
     if (!name) return;
     console.log(`use effect: ${name}`)
     childRef.current = name;
   }, [name])
-  
-  // const submitName = async (e: any) => {
-    
-  //   e.preventDefault();
-  //   console.log(e)
-  //   console.log('uh')
-  //   const userId = FirebaseUtils.getUserId()
-  //   const r = await FirebaseUtils.onNameSubmit(name, time, userId);
-  //   console.log(r);
-  //   resetGame();
-  //   // setDidSubmit(true);
-  // }
-  
+
   const handleChange = (key: number, value: string) => {
     console.log(`handle change: ${value}`)
     setName(value);
@@ -75,9 +58,6 @@ const Form: React.FC<FormProps> = ({ time, resetGame, childRef }): JSX.Element =
     <form>
       <label htmlFor={"name"}></label>
       <Input handleChange={handleChange} initialKey={0} InitialValue={name} id={"name"} />
-      {/* <button onClick={resetGame}>{'Cancel'}</button> */}
-      {/* <button>Submit</button> */}
-      <button>{'Submit'}</button>
     </form>
   );
 }
