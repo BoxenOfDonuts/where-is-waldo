@@ -1,4 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
+import { convertToObject } from "typescript";
+import { FirebaseUtils } from "../../helpers/FirebaseUtils";
 import './Overlay.css';
 
 interface OverlayProps {
@@ -6,40 +8,76 @@ interface OverlayProps {
   resetGame: () => void;
 }
 
+interface FormProps {
+  time?: number|string;
+  resetGame: () => void;
+  childRef: React.MutableRefObject<any>;
+}
+
 const Overlay: React.FC<OverlayProps> = ({ time, resetGame }): JSX.Element => {
-  
+  const formRef = useRef<HTMLFormElement>(null);
+
+  const handleFormSubmit = async () => {
+    console.log('clicking stuff here')
+    const {current} = formRef;
+    console.log(current)
+    if (formRef.current) {
+      console.log(formRef.current.name)
+      const name = formRef.current.name;
+      const userId = FirebaseUtils.getUserId();
+      const r = await FirebaseUtils.onNameSubmit(name, time, userId);
+      console.log(r);
+    }
+  }
+
   return (
     <>
       <div className="blur-background">
         <div className="popup-wrapper" style={{position: 'absolute', zIndex: 2, top: '25%', left: '50%', backgroundColor: 'white'}}>
           <p>{`Time Taken: ${time} seconds!`}</p>
-          <Form />
+          <Form time={time} resetGame={resetGame} childRef={formRef}/>
           <button onClick={resetGame}>{'Cancel'}</button>
-          <button onClick={resetGame}>{'Submit'}</button>
+          <button onClick={handleFormSubmit}>{'Submit'}</button>
         </div>
       </div>
     </>
   );
 }
 
-const Form: React.FC = (): JSX.Element => {
+const Form: React.FC<FormProps> = ({ time, resetGame, childRef }): JSX.Element => {
   const [ name, setName ] = useState<string>('');
   const [ didSubmit, setDidSubmit ] = useState<Boolean>(false)
 
-  const submitName = (e: any) => {
-    e.preventDefault();
+  useEffect(() => {
+    if (!name) return;
+    console.log(`use effect: ${name}`)
+    childRef.current = name;
+  }, [name])
+  
+  // const submitName = async (e: any) => {
     
-    setDidSubmit(true);
-  }
-
+  //   e.preventDefault();
+  //   console.log(e)
+  //   console.log('uh')
+  //   const userId = FirebaseUtils.getUserId()
+  //   const r = await FirebaseUtils.onNameSubmit(name, time, userId);
+  //   console.log(r);
+  //   resetGame();
+  //   // setDidSubmit(true);
+  // }
+  
   const handleChange = (key: number, value: string) => {
+    console.log(`handle change: ${value}`)
     setName(value);
   }
 
   return (
-    <form onSubmit={submitName}>
+    <form>
       <label htmlFor={"name"}></label>
       <Input handleChange={handleChange} initialKey={0} InitialValue={name} id={"name"} />
+      {/* <button onClick={resetGame}>{'Cancel'}</button> */}
+      {/* <button>Submit</button> */}
+      <button>{'Submit'}</button>
     </form>
   );
 }
