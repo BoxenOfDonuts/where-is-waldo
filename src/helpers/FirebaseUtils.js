@@ -3,31 +3,49 @@ import firebase from "firebase";
 import { firebaseConfig } from './config';
 
 
-
 firebase.initializeApp(firebaseConfig);
 
 
 const FirebaseUtils = (() => {
+  const highScoresDoc = firebase.firestore()
+                          .collection('high-scores')
+                          .doc('high-scores-list');
   
   const _isUserSignedIn = () => {
     return !!firebase.auth().currentUser;
   }
 
-  const signIn = () => {
+  const signIn = async () => {
     if (_isUserSignedIn()) return;
 
-    firebase.auth().signInAnonymously()
-      .then(() => {
-        console.log('Succesfull?')
-      })
-      .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        console.error(`Error! Code: ${errorCode} Message: ${errorMessage}`)
-        throw new Error();
-      })
+    return await firebase.auth().signInAnonymously();
+    // firebase.auth().signInAnonymously()
+    //   .then(() => {
+    //     console.log('sucessfull sign in')
+    //   })
+    //   .catch((error) => {
+    //     const errorCode = error.code;
+    //     const errorMessage = error.message;
+    //     console.error(`Error! Code: ${errorCode} Message: ${errorMessage}`)
+    //     throw new Error();
+    //   })
+  }
+  
+  const getUserId = () => {
+    if (_isUserSignedIn()) {
+      return firebase.auth().currentUser.uid;
+    } else {
+      console.log('user not signed in')
+      // try {
+      //   signIn();
+      //   getUserId();
+      // } catch {
+      //   //
+      // }
+    }
   }
 
+  // depreciated
   const _createUser = async () => {
     // actually don't think I need this?
     const userId = firebase.auth().currentUser.uid;
@@ -41,19 +59,8 @@ const FirebaseUtils = (() => {
     }
   }
 
-  const _onNameSubmit = async (name, time) => {
-    try {
-      return await firebase.firestore().collection('high-scores').add({
-        name,
-        completionTime: time,
-      });
-    
-    } catch (error) {
-      console.error(`Error writing new score to database ${error}`);
-    }
-  }
-  
-  const onNameSubmit = async (name, time, userId) => { 
+  // depreciated
+  const _onNameSubmit = async (name, time, userId) => { 
     const isHighScore = await _isHighScore(userId, time)
     if (!isHighScore) return;
     try {
@@ -75,32 +82,7 @@ const FirebaseUtils = (() => {
     return false;
   }
 
-  const _getUserId = async () => {
-    try {
-      const users = firebase.firestore().collection('users');
-      const query = await users.where('userId', '==', firebase.auth().currentUser.uid).get()
-      // const query = await users.where('userId', '==', 'meh').get()
-
-      if (query.empty) {
-        console.log('no user found');
-        
-      }
-
-      let user = '';
-
-      query.forEach(doc => {
-        console.log(doc.id)
-        user = doc.data()
-      })
-
-      // return user.userId;
-      return firebase.auth().currentUser.uid;
-      
-    } catch (error) {
-      console.error(error)
-    }
-  }
-
+  // depreciated
   const _isHighScore = async (userId, score) => {
     let previousTime = null;
 
@@ -115,28 +97,69 @@ const FirebaseUtils = (() => {
     }
 
     if (score < previousTime) {
-      console.log('Truth');
       return true;
     }
-    console.log('Not Truth');
     return false;
   }
 
-  const getUserId = () => {
-    if (_isUserSignedIn()) {
-      return firebase.auth().currentUser.uid;
-    } else {
-      console.log('user not signed in')
-      try {
-        getUserId();
-        
-      } catch {
-        //
-      }
+
+  const getHighScores = async () => {
+    try {
+      const highScores = await highScoresDoc
+                            .get();
+  
+      return highScores.data()['all-scores']
+    } catch (error) {
+      console.log(`Error getting high scores ${error}`)
     }
   }
 
-  return { signIn, onNameSubmit, getUserId };
+  const addScore = async (name, score) => {
+    try {
+      await highScoresDoc
+              .update({
+                "all-scores": firebase.firestore.FieldValue.arrayUnion({name, score})
+              });
+      return true;
+    } catch (error) {
+      console.error(`Error adding score ${error}`)
+    }
+  }
+
+  const setTime = async (action, time) => {
+    const userId = getUserId();
+    const timeTracking = firebase.firestore()
+                            .collection('time-tracking');
+    try {
+      await firebase.firestore()
+              .collection('time-tracking')
+              .doc(userId)
+              .set({
+                // [action]: firebase.firestore.FieldValue.serverTimestamp()
+                [action]: time
+              }, {merge: true})
+    } catch (error) {
+      console.error(`Error setting time ${error}`)
+    }
+  }
+
+  const getTime = async () => {
+    const userId = getUserId();
+    const timeTracking = firebase.firestore()
+                            .collection('time-tracking')
+                            .doc(userId);
+
+    try {
+      const startStopTimes = await timeTracking.get()
+      return startStopTimes.data();
+
+    } catch (error) {
+      console.error(`Error getting time ${error}`)
+    }
+  }
+
+
+  return { signIn, getUserId, getHighScores, addScore, setTime, getTime };
 })();
 
 export { FirebaseUtils }

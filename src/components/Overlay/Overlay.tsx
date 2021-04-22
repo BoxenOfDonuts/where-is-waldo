@@ -1,29 +1,26 @@
 import React, { useEffect, useRef, useState } from "react";
-import { convertToObject } from "typescript";
 import { FirebaseUtils } from "../../helpers/FirebaseUtils";
 import './Overlay.css';
 
 interface OverlayProps {
   time: number|string;
+  score: number|null;
   resetGame: () => void;
 }
 
 interface FormProps {
-  time?: number|string;
-  resetGame: () => void;
   childRef: React.MutableRefObject<any>;
 }
 
-const Overlay: React.FC<OverlayProps> = ({ time, resetGame }): JSX.Element => {
+const Overlay: React.FC<OverlayProps> = ({ score, time, resetGame }): JSX.Element => {
   const formRef = useRef<HTMLFormElement>();
 
   const handleFormSubmit = () => {
-    console.log('clicking stuff here')
     let name = formRef.current ? formRef.current : 'anonymous'
-    const userId = FirebaseUtils.getUserId();
-    if (FirebaseUtils.onNameSubmit(name, time, userId)) {
+    if (FirebaseUtils.addScore(name, score)) {
       resetGame();
     }
+
   }
 
   return (
@@ -31,7 +28,7 @@ const Overlay: React.FC<OverlayProps> = ({ time, resetGame }): JSX.Element => {
       <div className="blur-background">
         <div className="popup-wrapper" style={{position: 'absolute', zIndex: 2, top: '25%', left: '50%', backgroundColor: 'white'}}>
           <p>{`Time Taken: ${time} seconds!`}</p>
-          <Form time={time} resetGame={resetGame} childRef={formRef}/>
+          <Form childRef={formRef}/>
           <button onClick={resetGame}>{'Cancel'}</button>
           <button onClick={handleFormSubmit}>{'Submit'}</button>
         </div>
@@ -40,7 +37,7 @@ const Overlay: React.FC<OverlayProps> = ({ time, resetGame }): JSX.Element => {
   );
 }
 
-const Form: React.FC<FormProps> = ({ time, resetGame, childRef }): JSX.Element => {
+const Form: React.FC<FormProps> = ({ childRef }): JSX.Element => {
   const [ name, setName ] = useState<string>('');
 
   useEffect(() => {
@@ -55,7 +52,7 @@ const Form: React.FC<FormProps> = ({ time, resetGame, childRef }): JSX.Element =
   }
 
   return (
-    <form>
+    <form onSubmit={(e) => e.preventDefault() }>
       <label htmlFor={"name"}></label>
       <Input handleChange={handleChange} initialKey={0} InitialValue={name} id={"name"} />
     </form>
