@@ -102,6 +102,25 @@ const FirebaseUtils = (() => {
     return false;
   }
 
+  const initHighScores = () => {
+    const query = firebase.firestore()
+                    .collection('high-scores-2')
+                    .orderBy('score', 'asc')
+                    .limit('15')
+
+    query.onSnapshot((snapshot) => {
+      snapshot.docChanges().forEach(change => {
+        const score = change.doc.data();
+        console.log(score.name, score.score, score.timestamp)
+        updateHighScores(score.name, score.score, score.timestamp)
+      })
+    })
+  }
+
+  const updateHighScores = (name, score, timestamp) => {
+    return {name, score, timestamp}
+  }
+
 
   const getHighScores = async () => {
     try {
@@ -118,7 +137,12 @@ const FirebaseUtils = (() => {
     try {
       await highScoresDoc
               .update({
-                "all-scores": firebase.firestore.FieldValue.arrayUnion({name, score})
+                "all-scores": firebase.firestore.FieldValue.arrayUnion(
+                  {
+                    name,
+                    score,
+                    submitTime: new Date(),
+                  })
               });
       return true;
     } catch (error) {
@@ -135,7 +159,6 @@ const FirebaseUtils = (() => {
               .collection('time-tracking')
               .doc(userId)
               .set({
-                // [action]: firebase.firestore.FieldValue.serverTimestamp()
                 [action]: time
               }, {merge: true})
     } catch (error) {
@@ -158,8 +181,22 @@ const FirebaseUtils = (() => {
     }
   }
 
+  const initFirebaseAuth = () => {
+    firebase.auth().onAuthStateChanged(authStateObserver)
+  }
 
-  return { signIn, getUserId, getHighScores, addScore, setTime, getTime };
+  const authStateObserver = (user) => {
+    if (user) {
+      // user signed in!
+      setTime('startTime', Date.now()).then(
+        // complete
+      )
+
+    }
+  }
+
+
+  return { signIn, getUserId, getHighScores, addScore, setTime, getTime, initFirebaseAuth, initHighScores, updateHighScores };
 })();
 
 export { FirebaseUtils }
