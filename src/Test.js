@@ -1,5 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import { FirebaseContext, withFirebase } from "./components/Firebase";
+import { useScoreListener } from "./hooks/ScoreListener";
 
 function TodoList({ todos, isLoadingTodos }) {
 
@@ -54,32 +55,30 @@ const PageTwo = withFirebase(BasePageTwo);
 
 const Test = () => {
   const firebase = useContext(FirebaseContext);
-  const [ higScores, setScores ] = useState([])
+  // const [ highScores, setScores ] = useState([])
+  const [ scores ] = useScoreListener(firebase);
 
   const updateScores = () => {
-    firebase.updateHighScores('Elizabeth', 487)
+    firebase.updateHighScores('Winnie', 899)
   }
 
-  const scoreListener = () => {
-    let listener = firebase.scores.onSnapshot((snapshot) => {
-      snapshot.docChanges().forEach(change => {
-        const scoreData = change.doc.data();
-        const {name, score, timestamp} = scoreData;
-        setScores(prevState => [...prevState, {name, score, timestamp}])
-      })
-    })
-
-    return listener
-
-  }
+  // const scoreListener = () => {
+  //   return firebase.scores.onSnapshot((snapshot) => {
+  //     snapshot.docChanges().forEach(change => {
+  //       const scoreData = change.doc.data();
+  //       const {name, score, timestamp} = scoreData;
+  //       setScores(prevState => [...prevState, {name, score, timestamp}])
+  //     })
+  //   })
+  // }
 
   useEffect(() => {
     firebase.signIn();
-    const listener = scoreListener();
-    return () => {
-      console.log('unmounted')
-      listener.remove()
-    }
+    // const listener = scoreListener();
+    // return () => {
+    //   console.log('unmounted')
+    //   listener()
+    // }
   },[])
 
   return (
@@ -93,6 +92,11 @@ const Test = () => {
       >
         Update Score
       </Button>
+      <ul>
+        {scores.map(value => {
+          return <li key={value.id}>{value.name + ' ' + value.score}</li>
+        })}
+      </ul>
     </div>
   );
 
