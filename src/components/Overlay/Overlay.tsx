@@ -79,12 +79,10 @@ const Form: React.FC<FormProps> = ({ childRef }): JSX.Element => {
 
   useEffect(() => {
     if (!name) return;
-    console.log(`use effect: ${name}`)
     childRef.current = name;
   }, [name])
 
   const handleChange = (key: number, value: string) => {
-    console.log(`handle change: ${value}`)
     setName(value);
   }
 

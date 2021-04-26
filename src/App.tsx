@@ -9,7 +9,6 @@ const App: React.FC = () => {
 
 
   const updateInventory = (item: string) => {
-    console.log(inventory[item])
     setInventory({
       ...inventory,
       [item]: {

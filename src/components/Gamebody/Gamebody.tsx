@@ -25,7 +25,6 @@ const Gamebody: React.FC<AppProps> = ({pictures, updateInventory}) => {
   },[])
 
   useEffect(() => {
-    console.log(pictures)
     const remaining = Object.keys(pictures).reduce((accum, value): number => {
       if (!pictures[value].found) return accum +1;
       return accum + 0;
@@ -41,7 +40,6 @@ const Gamebody: React.FC<AppProps> = ({pictures, updateInventory}) => {
 
     const calculateScore = async () => {
       const now = Date.now()
-      console.log(now)
       const playerTimes = await firebase.getTime()
       const score =  Math.round((now - playerTimes?.startTime) / 1000)
       setTimeToComplete(score);

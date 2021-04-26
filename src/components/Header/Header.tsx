@@ -15,7 +15,6 @@ export const Header: React.FC<HeaderProps> = ({title, pictures}) => {
       if (!pictures[value].found) return accum +1;
       return accum + 0;
     }, 0);
-    console.log(`${remaining} remaining`)
     setCount(remaining);
   }, [pictures])
 

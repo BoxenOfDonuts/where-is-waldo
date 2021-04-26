@@ -1,31 +1,9 @@
 import React, { useState } from 'react';
 // import { pictures } from '../Pictures/Picture';
 import { Selector } from '../Selector/Selector';
-import { AppProps, Props } from './PictureArea.types';
+import { AppProps } from './PictureArea.types';
 import Image from '../../Images/beach_waldo.png'
 import './PictureArea.css';
-
-
-const Box: React.FC<Props> = ({ color, width = '100%', extra, children }) => {
-  let style = {
-    height: '200px',
-    width,
-    backgroundColor: color,
-  };
-
-  if (extra) {
-    style = {
-      ...style,
-      ...extra,
-    };
-  }
-
-  return (
-    <div style={style}>
-      {children}
-    </div>
-  );
-};
 
 export const PictureArea: React.FC<AppProps> = React.memo(({ pictures, updateInventory }) => {
   const [ clicked, setClick ] = useState<boolean>(false)

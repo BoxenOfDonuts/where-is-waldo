@@ -1,8 +1,5 @@
 import { useEffect, useState } from 'react';
 
-
-
-
 const useScoreListener = ( firebase ) => {
   const [ scores, setScores ] = useState([]);
 
