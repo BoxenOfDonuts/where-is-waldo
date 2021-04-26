@@ -1,9 +1,8 @@
 import { PictureArea } from '../PictureArea/PictureArea';
 import React, { useState, useEffect, useContext } from 'react';
-import { FirebaseContext, withFirebase } from "../Firebase";
+import { FirebaseContext } from "../Firebase";
 import { LocationDict } from '../Pictures/Picture.types';
 import { Overlay } from '../Overlay/Overlay';
-import { InventoryContext } from '../../App';
 import { useScoreListener } from '../../hooks/ScoreListener';
 import { FirebaseUtil } from "../Firebase/Firebase.types";
 
@@ -15,7 +14,6 @@ interface AppProps {
 
 const Gamebody: React.FC<AppProps> = ({pictures, updateInventory}) => {
   const firebase = useContext<FirebaseUtil>(FirebaseContext);
-  const [ inventory, setInventory ] = useContext(InventoryContext)
   const [ gameOver, setGameOver ] = useState<boolean>(false)
   const [ timeToComplete, setTimeToComplete ] = useState<number|null>(null);
   const [ scores ] = useScoreListener(firebase);
@@ -27,16 +25,16 @@ const Gamebody: React.FC<AppProps> = ({pictures, updateInventory}) => {
   },[])
 
   useEffect(() => {
-    console.log(inventory)
-    const remaining = Object.keys(inventory).reduce((accum, value): number => {
-      if (!inventory[value].found) return accum +1;
+    console.log(pictures)
+    const remaining = Object.keys(pictures).reduce((accum, value): number => {
+      if (!pictures[value].found) return accum +1;
       return accum + 0;
     }, 0);
     if (remaining === 0) {
       firebase.setTime('endTime', Date.now());
       setGameOver(true);
     };
-  }, [inventory]);
+  }, [pictures]);
 
   useEffect(() => {
     if (!gameOver) return
