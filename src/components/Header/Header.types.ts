@@ -3,7 +3,7 @@ import { LocationDict } from '../Pictures/Picture.types';
 interface HeaderProps {
   title: string;
   pictures: LocationDict;
-  stopwatch: string;
+  stopwatch?: string;
 }
 
 interface NavItemProps {

@@ -2,16 +2,15 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
-import Test from './Test';
-import Firebase, { FirebaseContext } from './components/Firebase';
 import reportWebVitals from './reportWebVitals';
+import  Firebase, { FirebaseContext, withFirebase } from './components/Firebase';
 
 ReactDOM.render(
-  <React.StrictMode>
-    <FirebaseContext.Provider value ={Firebase()}>
-      <Test />
-    </FirebaseContext.Provider>
-  </React.StrictMode>,
+  <FirebaseContext.Provider value ={Firebase()}>
+    <React.StrictMode>
+        <App />
+    </React.StrictMode>,
+    </FirebaseContext.Provider>,
   document.getElementById('root')
 );
 

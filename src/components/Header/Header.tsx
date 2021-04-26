@@ -3,8 +3,10 @@ import { useStopwatch } from '../../hooks/Stopwatch';
 import { HeaderProps, NavItemProps, DropDownMenuProps, DropDownItemProps } from './Header.types';
 import './Header.css';
 
-export const Header: React.FC<HeaderProps> = ({title, pictures, stopwatch}) => {
+export const Header: React.FC<HeaderProps> = ({title, pictures}) => {
   const [ count, setCount ] = useState<number>(Object.keys(pictures).length);
+  const [ shouldStop, setShouldStop ] = useState(false)
+  const [ time, formattedTime ] = useStopwatch(0, 1000, shouldStop, 0)
 
   useEffect(() => {
     const remaining = Object.keys(pictures).reduce((accum, value): number => {
@@ -14,11 +16,17 @@ export const Header: React.FC<HeaderProps> = ({title, pictures, stopwatch}) => {
     setCount(remaining);
   }, [pictures])
 
+  useEffect(() => {
+    if (count === 0) {
+      setShouldStop(true);
+    }
+  },[count])
+
   return (
     <nav className="navbar">
       <ul className={"navbar-nav"}>
         {/* <Timer /> */}
-        <NavItem buttonName={stopwatch} />
+        <NavItem buttonName={formattedTime} />
         <NavItem buttonName={`Remaining ${count}`} classes={['clickable']}>
           <DropDownMenu pictures={pictures} />
         </NavItem>
@@ -89,14 +97,3 @@ const DropDownItem: React.FC<DropDownItemProps> = ({children, found, leftIcon, r
     </div>
   );
 }
-
-// const Timer: React.FC = () => {
-//   // const [ time, formattedTime ] = useStopwatch(0, 1000);
-//   const [ time, formattedTime ] = useStopwatch(0, 1000, false);
-
-//   return (
-//     <>
-//       <NavItem buttonName={formattedTime}/>
-//     </>
-//   );
-// }

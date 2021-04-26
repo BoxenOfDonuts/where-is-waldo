@@ -1,7 +1,8 @@
-import React, { useEffect, useRef, useState } from "react";
-import { FirebaseUtils } from "../../helpers/FirebaseUtils";
-import Game from "../../helpers/Game";
+import React, { useEffect, useRef, useState, useContext } from "react";
+import { FirebaseContext } from "../Firebase";
+import { FirebaseUtil } from "../Firebase/Firebase.types";
 import './Overlay.css';
+
 
 type highScoreArray = [
   {
@@ -12,31 +13,29 @@ type highScoreArray = [
 ]
 
 interface OverlayProps {
-  time: number|string;
-  score: number|null;
-  resetGame: () => void;
+  timeToComplete: number|null;
+  score?: number|null;
+  leaderboard?: {name: string, score: string, timestamp: Date}[]
+  resetGame?: () => void;
 }
 
 interface FormProps {
   childRef: React.MutableRefObject<any>;
 }
 
-const Overlay: React.FC<OverlayProps> = ({ score, time, resetGame }): JSX.Element => {
+
+
+const Overlay: React.FC<OverlayProps> = ({ leaderboard, timeToComplete, resetGame }): JSX.Element => {
   const [ didSubmit, setDidSubmit ] = useState<boolean>(false);
-  const [ leaderboard, setLeaderboard ] = useState<highScoreArray|null>(null)
-  const [ test, setTest ] = useState(FirebaseUtils.updateHighScores())
+  const firebase = useContext<FirebaseUtil>(FirebaseContext);
 
-  useEffect(() => {
-    FirebaseUtils.initHighScores();
-  },[])
-
-  const formRef = useRef<HTMLFormElement>();
+  const formRef = useRef<string>();
 
   const handleFormSubmit = () => {
     let name = formRef.current ? formRef.current : 'anonymous'
-    if (FirebaseUtils.addScore(name, score)) {
+    if (timeToComplete === null) return;
+    if (firebase.updateHighScores(name, timeToComplete)) {
       setDidSubmit(true);
-      Game.getLeaderboard().then(leaderboard => setLeaderboard(leaderboard))
     }
 
   }
@@ -45,7 +44,7 @@ const Overlay: React.FC<OverlayProps> = ({ score, time, resetGame }): JSX.Elemen
   if (!didSubmit) {
     content = (
       <>
-        <p>{`Time Taken: ${time} seconds!`}</p>
+        <p>{`Time Taken: ${timeToComplete} seconds!`}</p>
         <Form childRef={formRef}/>
         <button onClick={resetGame}>{'Cancel'}</button>
         <button onClick={handleFormSubmit}>{'Submit'}</button>
@@ -56,8 +55,8 @@ const Overlay: React.FC<OverlayProps> = ({ score, time, resetGame }): JSX.Elemen
       <>
         <ul className="leader-board">
           {leaderboard?.map(value => {
-            const { name, score } = value;
-            return <LeaderBoardItem key={value} name={name} score={score} />
+            const { name, score, timestamp } = value;
+            return <LeaderBoardItem key={timestamp} name={name} score={score} />
           })}
         </ul>
       </>

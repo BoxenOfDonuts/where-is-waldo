@@ -1,5 +1,8 @@
 import { useEffect, useState } from 'react';
 
+
+
+
 const useScoreListener = ( firebase ) => {
   const [ scores, setScores ] = useState([]);
 
@@ -8,7 +11,8 @@ const useScoreListener = ( firebase ) => {
       snapshot.docChanges().forEach(change => {
         const scoreData = change.doc.data();
         const {name, score, timestamp} = scoreData;
-        setScores(prevState => [...prevState, {name, score, timestamp, id: change.doc.id}])
+        setScores(prevState =>
+          [...prevState, {name, score, timestamp, id: change.doc.id}]);
       })
     })
   }
@@ -22,7 +26,10 @@ const useScoreListener = ( firebase ) => {
     }
   },[])
 
-  return [ scores ]
+  // won't have to do this if I route!!!
+  const sortedScores = scores.sort((a, b) => a.score - b.score)
+
+  return [ sortedScores ]
 
 }
 

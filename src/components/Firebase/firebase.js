@@ -55,16 +55,51 @@ const Firebase = (() => {
         score,
         timestamp: firebase.firestore.Timestamp.fromDate(new Date())
       })
+      return true
     } catch (error) {
       console.error(error)
+    }
+    return false;
+  }
+
+  const setTime = async (action, time) => {
+    const userId = getUserId();
+
+    try {
+      await firebase.firestore()
+              .collection('time-tracking')
+              .doc(userId)
+              .set({
+                [action]: time
+              }, {merge: true})
+      return true;
+    } catch (error) {
+      console.error(`Error setting time ${error}`)
+    }
+    return false;
+  }
+
+  const getTime = async () => {
+    const userId = getUserId();
+    const timeTracking = firebase.firestore()
+                            .collection('time-tracking')
+                            .doc(userId);
+
+    try {
+      const startStopTimes = await timeTracking.get()
+      return startStopTimes.data();
+
+    } catch (error) {
+      console.error(`Error getting time ${error}`)
     }
   }
 
   return {
     signIn,
     getUserId,
-    initHighScores,
     updateHighScores,
+    setTime,
+    getTime,
     scores,
   }
 })
