@@ -1,9 +1,9 @@
 img {
   width: 80vw;
   object-fit: cover;
-  padding: 15px;
 }
 
 .image-container {
   display: inline-block;
+  margin: 15px;
 }
