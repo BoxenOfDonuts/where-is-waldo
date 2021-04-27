@@ -94,12 +94,53 @@ const Firebase = (() => {
     }
   }
 
+  const setCharacterLocation = async (name, xStart, xEnd, yStart, yEnd) => {
+    try {
+      await firebase.firestore()
+              .collection('character-location')
+              .doc()
+              .set({
+                name,
+                xStart,
+                xEnd,
+                yStart,
+                yEnd,
+              }, {merge: true})
+      return true;
+    } catch (error) {
+      console.error(`error setting character location ${error}`)
+    }
+    return false;
+  }
+
+  const getCharacterLocation = async () => {
+    const query = await firebase.firestore()
+                    .collection('character-location')
+                    .get();
+
+    const characterLocations = {}
+    query.forEach(doc => {
+      const {name, xStart, xEnd, yStart, yEnd} = doc.data();
+      characterLocations[name] =  {
+          name,
+          xStart,
+          xEnd,
+          yStart,
+          yEnd,
+          found: false,
+        }
+    })
+    return characterLocations;
+  }
+
   return {
     signIn,
     getUserId,
     updateHighScores,
     setTime,
     getTime,
+    setCharacterLocation,
+    getCharacterLocation,
     scores,
   }
 })

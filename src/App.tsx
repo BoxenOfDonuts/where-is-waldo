@@ -1,14 +1,18 @@
 import './App.css';
 import { Header } from './components/Header/Header';
-import { pictures } from './components/Pictures/Picture';
-import React, { useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import Gamebody from './components/Gamebody/Gamebody';
+import { LocationDict } from './components/Pictures/Picture.types';
+import { FirebaseContext } from "./components/Firebase";
+import { FirebaseUtil } from "./components/Firebase/Firebase.types";
+import { pictures } from './components/Pictures/Picture';
 
 const App: React.FC = () => {
-  const [ inventory, setInventory ] = useState(pictures);
-
+  const firebase = useContext<FirebaseUtil>(FirebaseContext);
+  const [ inventory, setInventory ] = useState<LocationDict>(pictures);
 
   const updateInventory = (item: string) => {
+    if(!inventory) return;
     setInventory({
       ...inventory,
       [item]: {
@@ -18,6 +22,12 @@ const App: React.FC = () => {
     })
   }
 
+  useEffect(() => {
+    firebase.getCharacterLocation().then((data) => {
+      setInventory(data);
+    })
+  },[])
+  
   return (
     <>
       <Header

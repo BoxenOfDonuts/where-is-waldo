@@ -25,6 +25,7 @@ const Gamebody: React.FC<AppProps> = ({pictures, updateInventory}) => {
   },[])
 
   useEffect(() => {
+    if (!pictures) return;
     const remaining = Object.keys(pictures).reduce((accum, value): number => {
       if (!pictures[value].found) return accum +1;
       return accum + 0;
