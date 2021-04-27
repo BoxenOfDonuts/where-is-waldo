@@ -23,7 +23,6 @@ export const Selector: React.FC<SelectorProps> = ({ list, onMouse, location }) =
   }
   
   useEffect(() => {
-    console.log('render')
     const [ x, y ] = setPosition(dropdownCoordinates.x, dropdownCoordinates.y);
     setDropdownCoordinates({x, y});
     

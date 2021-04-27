@@ -1,12 +1,12 @@
 import { Location, LocationDict } from './Picture.types';
 
-const Picture = (name: string, yStart: number, yEnd:number, xStart:number, xEnd:number): Location => {
+const Picture = (name: string, xStart:number, xEnd:number, yStart: number, yEnd:number): Location => {
   const data = {
     name,
-    yStart,
-    yEnd,
     xStart,
     xEnd,
+    yStart,
+    yEnd,
     found: false,
   }
   
@@ -15,15 +15,15 @@ const Picture = (name: string, yStart: number, yEnd:number, xStart:number, xEnd:
   }
 }
 
-const waldo: Location = Picture('Waldo', 388, 410, 800, 820);
-const purple: Location = Picture('Purple', 400, 420, 1895, 1915);
-const orange: Location = Picture('Orange', 0, 20, 50, 70);
+const waldo: Location = Picture('Waldo', 1115, 1200, 245, 325);
+const wizard: Location = Picture('Wizard', 400, 450, 215, 285);
+const odlaw: Location = Picture('Odlaw', 45, 76, 222, 295);
 
 // probably needs to be an array unless they have to click "who" they're guessing
 const pictures: LocationDict = {
-  Purple: purple,
+  Wizard: wizard,
   Waldo: waldo,
-  Orange: orange,
+  Odlaw: odlaw,
 }
 
 export { pictures }
