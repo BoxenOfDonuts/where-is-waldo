@@ -5,10 +5,8 @@ const Firebase = (() => {
   firebase.initializeApp(firebaseConfig);
   
   const scores = firebase.firestore()
-                        .collection('high-scores-2')
-                        .orderBy('score', 'asc')
-                        .limit('15')
-
+                        .collection('high-scores')
+                        
   const _isUserSignedIn = () => {
     return !!firebase.auth().currentUser;
   }
@@ -28,8 +26,7 @@ const Firebase = (() => {
   }
 
   const initHighScores = () => {
-    const query = firebase.firestore()
-                    .collection('high-scores-2')
+    const query = scores
                     .orderBy('score', 'asc')
                     .limit('15')
 
@@ -47,8 +44,6 @@ const Firebase = (() => {
   }
 
   const updateHighScores = async (name, score) => {
-    const scores = firebase.firestore()
-                      .collection('high-scores-2');
     try {
       await scores.add({
         name,
@@ -130,6 +125,7 @@ const Firebase = (() => {
           found: false,
         }
     })
+    console.log('Character Loading Complete');
     return characterLocations;
   }
 
@@ -146,6 +142,3 @@ const Firebase = (() => {
 })
 
 export default Firebase;
-
-
-

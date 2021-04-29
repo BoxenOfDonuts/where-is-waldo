@@ -2,7 +2,7 @@ import { LocationDict } from '../Pictures/Picture.types';
 
 interface HeaderProps {
   title: string;
-  pictures: LocationDict;
+  pictures?: LocationDict;
   stopwatch?: string;
 }
 

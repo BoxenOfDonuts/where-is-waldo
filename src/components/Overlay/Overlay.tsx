@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState, useContext } from "react";
 import { Redirect } from "react-router";
+import { Link } from "react-router-dom";
 import { FirebaseContext } from "../Firebase";
 import { FirebaseUtil } from "../Firebase/Firebase.types";
 import './Overlay.css';
@@ -48,7 +49,11 @@ const Overlay: React.FC<OverlayProps> = ({ leaderboard, timeToComplete, resetGam
         <p>{`Time Taken: ${timeToComplete} seconds!`}</p>
         <Form childRef={formRef}/>
         <button onClick={resetGame}>{'Cancel'}</button>
+        {/* <Link to="/leaderboard" >
+          <button onClick={handleFormSubmit}>{'Submit'}</button>
+        </Link> */}
         <button onClick={handleFormSubmit}>{'Submit'}</button>
+
       </>
     )
   } else {

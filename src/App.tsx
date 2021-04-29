@@ -5,6 +5,7 @@ import { LocationDict } from './components/Pictures/Picture.types';
 import { FirebaseContext } from "./components/Firebase";
 import { FirebaseUtil } from "./components/Firebase/Firebase.types";
 import { pictures } from './components/Pictures/Picture';
+import Leaderboard  from './components/Leaderboard/Leaderboard';
 import {
   BrowserRouter as Router,
   Switch,
@@ -27,6 +28,13 @@ const App: React.FC = () => {
     })
   }
 
+  const resetGame = () => {
+    firebase.getCharacterLocation().then((data) => {
+      setInventory(data);
+      setLoading(false);
+    })
+  }
+
   useEffect(() => {
     firebase.getCharacterLocation().then((data) => {
       setInventory(data);
@@ -42,10 +50,10 @@ const App: React.FC = () => {
             <Home isDisabled={loading}/>
           </Route>
           <Route path="/where-is-waldo" >
-            <Game inventory={inventory} updateInventory={updateInventory}/>
+            <Game inventory={inventory} updateInventory={updateInventory} />
           </Route>
           <Route path="/leaderboard">
-            <div><h1>Ha</h1></div>
+            <Leaderboard />
           </Route>
         </Switch>
       </Router>

@@ -30,6 +30,7 @@ const Gamebody: React.FC<AppProps> = ({pictures, updateInventory}) => {
   const [ timeToComplete, setTimeToComplete ] = useState<number|null>(null);
   const [ scores ] = useScoreListener(firebase);
 
+
   useEffect(() => {
     firebase.signIn().then(r =>
       firebase.setTime('startTime', Date.now())
@@ -50,7 +51,6 @@ const Gamebody: React.FC<AppProps> = ({pictures, updateInventory}) => {
 
   useEffect(() => {
     if (!gameOver) return
-
     const calculateScore = async () => {
       const now = Date.now()
       const playerTimes = await firebase.getTime()

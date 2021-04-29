@@ -1,14 +1,13 @@
 import { LocationDict } from "../Pictures/Picture.types";
 
 interface GameProps {
-  inventory: LocationDict, 
-  updateInventory: (item:string) => void
+  inventory: LocationDict;
+  updateInventory: (item:string) => void;
 }
 
 interface AppProps {
   pictures: LocationDict;
-  updateInventory: (item: string) => void
+  updateInventory: (item: string) => void;
 }
-
 
 export type { GameProps, AppProps }

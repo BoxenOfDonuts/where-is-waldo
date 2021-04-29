@@ -10,7 +10,16 @@ export const Header: React.FC<HeaderProps> = ({title, pictures}) => {
   const [ shouldStop, setShouldStop ] = useState(false)
   const [ time, formattedTime ] = useStopwatch(0, 1000, shouldStop, 0)
 
+
+  // children then create a game header?? 
   useEffect(() => {
+    if (!pictures) {
+      setShouldStop(true);
+    }
+  },[])
+
+  useEffect(() => {
+    if (!pictures) return
     const remaining = Object.keys(pictures).reduce((accum, value): number => {
       if (!pictures[value].found) return accum +1;
       return accum + 0;
@@ -27,13 +36,21 @@ export const Header: React.FC<HeaderProps> = ({title, pictures}) => {
   return (
     <nav className="navbar">
       <ul className={"navbar-nav"}>
-        {/* <Timer /> */}
-        <NavItem buttonName={formattedTime} />
-        <NavItem buttonName={`Remaining ${count}`} classes={['clickable']}>
-          <DropDownMenu pictures={pictures} />
-        </NavItem>
+        <NavItem buttonName={title} />
+        {pictures && <GameNav formattedTime={formattedTime} count={count} pictures={pictures} />}
       </ul>
     </nav>
+  );
+}
+
+const GameNav: React.FC<any> = ({ formattedTime, count, pictures }) => {
+  return (
+    <>
+      <NavItem buttonName={formattedTime} />
+      <NavItem buttonName={`Remaining ${count}`} classes={['clickable']}>
+        <DropDownMenu pictures={pictures} />
+      </NavItem>
+    </>
   );
 }
 
