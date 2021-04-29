@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState, useContext } from "react";
+import { Redirect } from "react-router";
 import { FirebaseContext } from "../Firebase";
 import { FirebaseUtil } from "../Firebase/Firebase.types";
 import './Overlay.css';
@@ -53,6 +54,7 @@ const Overlay: React.FC<OverlayProps> = ({ leaderboard, timeToComplete, resetGam
   } else {
     content = (
       <>
+        {didSubmit && <Redirect to="/leaderboard" /> }
         <ul className="leader-board">
           {leaderboard?.map(value => {
             const { name, score, timestamp } = value;

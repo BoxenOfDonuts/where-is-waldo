@@ -1,14 +1,26 @@
 import { PictureArea } from '../PictureArea/PictureArea';
 import React, { useState, useEffect, useContext } from 'react';
 import { FirebaseContext } from "../Firebase";
-import { LocationDict } from '../Pictures/Picture.types';
 import { Overlay } from '../Overlay/Overlay';
 import { useScoreListener } from '../../hooks/ScoreListener';
 import { FirebaseUtil } from "../Firebase/Firebase.types";
+import { Header } from '../Header/Header';
+import { AppProps, GameProps } from './Game.types';
 
-interface AppProps {
-  pictures: LocationDict;
-  updateInventory: (item: string) => void
+const Game: React.FC<GameProps> = ( {inventory, updateInventory} ) => {
+  return (
+    <>
+      <Header
+        title={"Where Is Waldo"}
+        pictures={inventory}
+      />
+      <Gamebody
+        pictures={inventory}
+        updateInventory={updateInventory}
+      >
+      </Gamebody>
+    </>
+  );
 }
 
 
@@ -60,4 +72,4 @@ const Gamebody: React.FC<AppProps> = ({pictures, updateInventory}) => {
   );
 }
 
-export default Gamebody;
+export default Game;
