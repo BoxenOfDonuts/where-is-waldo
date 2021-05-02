@@ -1,0 +1,28 @@
+.leaderboard-card {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr;
+  grid-gap: 5px;
+  padding: 10px 0;
+  background-color: rgb(238, 238, 238);
+}
+
+.leaderboard {
+  width: 80%;
+  margin: auto;
+  margin-top: 20px;
+}
+
+li.score-item {
+  list-style: none;
+  border-bottom: 1px solid #6e6e6e;
+  /* margin: 1px; */
+}
+
+.score, .names {
+  margin-left: 5px;
+}
+
+body, html .leaderboard {
+  background-image: var(--waldo-br);
+}

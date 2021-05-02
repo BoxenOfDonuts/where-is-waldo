@@ -9,6 +9,7 @@
   --border: 1px solid #474a4d;
   --speed: 300ms;
   --border-radius: 4px;
+  --waldo-br: url('./Images/waldo_maze.jpg');
 }
 
 .App {
@@ -29,7 +30,7 @@
   z-index: -1;
 
   display: block;
-  background-image: url('./Images/waldo_maze.jpg');
+  background-image: var(--waldo-br);
   background-size: cover;
   width: 110%;
   height: 110%;
