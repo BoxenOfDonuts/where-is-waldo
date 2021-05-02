@@ -8,6 +8,7 @@ import './PictureArea.css';
 export const PictureArea: React.FC<AppProps> = React.memo(({ pictures, updateInventory }) => {
   const [ clicked, setClick ] = useState<boolean>(false)
   const [ clickedCoordinates, setClickedCoordinates ] = useState<number[]>([0,0])
+  const [ guessLocation, setGuessLocation ] = useState<number[]>([0,0])
   
   const didHit = (x:number ,y: number, guess: string ): boolean => {
     // return if somehow not in the dict
@@ -28,10 +29,10 @@ export const PictureArea: React.FC<AppProps> = React.memo(({ pictures, updateInv
 
   const onMouse = (guess: string) => {
     // const [x, y] = [e.clientX, e.clientY];
-    const [ x, y ] = clickedCoordinates; 
+    const [ x, y ] = guessLocation; 
     console.log(x, y);
     console.log(didHit(x,y, guess));
-    setClickedCoordinates([0,0]);
+    // setClickedCoordinates([0,0]);
   };
 
   const calculateOffset = (x: number, y: number, offset: DOMRect): number[] => {
@@ -43,7 +44,10 @@ export const PictureArea: React.FC<AppProps> = React.memo(({ pictures, updateInv
   const openDropdown = (e: React.MouseEvent<HTMLElement>) => {
     setClick(clicked => !clicked);
     const [x , y] = calculateOffset(e.clientX, e.clientY, e.currentTarget.getBoundingClientRect());
+    const xPercent: number = Math.round(x / e.currentTarget.offsetWidth * 100); // percent x location instead of by pixel
+    const yPercent: number = Math.round(y / e.currentTarget.offsetHeight * 100); // percent y location instead of by pixel
     setClickedCoordinates([x, y]);
+    setGuessLocation([xPercent, yPercent]);
   }
 
   return (
