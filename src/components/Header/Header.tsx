@@ -116,3 +116,5 @@ const DropDownItem: React.FC<DropDownItemProps> = ({children, found, leftIcon, r
     </div>
   );
 }
+
+export { DropDownItem }

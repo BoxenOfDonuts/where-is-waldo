@@ -29,3 +29,16 @@
   background-color: white;
   pointer-events: none;
 }
+
+.dropdown-item {
+  height: 50xp;
+  display: flex;
+  align-items: center;
+  border-radius: var(--border-radius);
+  transition: background var(--speed);
+  padding: .5rem;
+}
+
+.dropdown-item:hover {
+  background-color: #444;
+}

@@ -1,5 +1,7 @@
 import { LocationDict } from '../Pictures/Picture.types';
 import { CSSProperties, useEffect, useState } from 'react';
+import { DropDownMenu, DropDownItem } from '../Header/Header';
+
 import './Selector.css';
 
 interface SelectorProps {
@@ -35,28 +37,39 @@ export const Selector: React.FC<SelectorProps> = ({ list, onMouse, location }) =
     zIndex: 1,
   }
 
-  const dropdownItems = Object.keys(list).map(value => {
-    const name = list[value].name
-    let classname =  "picture-name"
-    classname = list[value].found
-     ?  classname += ' found-picture'
-     : classname
+  // const dropdownItems = Object.keys(list).map(value => {
+  //   const name = list[value].name
+  //   let classname =  "picture-name"
+  //   classname = list[value].found
+  //    ?  classname += ' found-picture'
+  //    : classname
     
-    return (
-      <li
-        className={classname}
-        onClick={() => onMouse(name)}
-      >
-        {name}
-      </li>)
+  //   return (
+  //     <li
+  //       className={classname}
+  //       onClick={() => onMouse(name)}
+  //     >
+  //       {name}
+  //     </li>)
      
+  // })
+
+  const items = Object.keys(list).map(value => {
+    const name = list[value].name;
+    const found = list[value].found;
+    return (
+      <div key={name} onClick={() => onMouse(name)}>
+        <DropDownItem found={found} >
+          {name}
+        </DropDownItem>
+      </div>
+    );
   })
+
 
   return (
     <div className="selector-wrapper" style={style}>
-      <ul className="selector">
-        {dropdownItems}
-      </ul>
+      {items}
     </div>
   );
 }
