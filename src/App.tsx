@@ -10,8 +10,9 @@ import {
   BrowserRouter as Router,
   Switch,
   Route,
-  Link,
+  Redirect,
 } from "react-router-dom";
+import { Overlay } from './components/Overlay/Overlay';
 
 const App: React.FC = () => {
   const firebase = useContext<FirebaseUtil>(FirebaseContext);
@@ -47,7 +48,8 @@ const App: React.FC = () => {
       <Router>
         <Switch>
           <Route path="/" exact>
-            <Home isDisabled={loading}/>
+            <Landing isLoading={loading} />
+            {/* {!loading && <Redirect to="/where-is-waldo" />} */}
           </Route>
           <Route path="/where-is-waldo" >
             <Game inventory={inventory} updateInventory={updateInventory} />
@@ -61,12 +63,27 @@ const App: React.FC = () => {
   )
 };
 
+const Landing: React.FC<{isLoading: boolean}> = ({ isLoading }) => {
+  const [ play, setPlay ] = useState(false);
+  const [ message, setMessage ] = useState('');
 
-const Home: React.FC<{isDisabled: boolean}> = ({ isDisabled })  => {
+  useEffect(() => {
+    if (isLoading) {
+      setMessage('Loading...');
+    } else {
+      setMessage('Ready!');
+    }
+
+  },[isLoading])
+
   return (
-    <Link to="/where-is-waldo" >
-      <button disabled={isDisabled} className='btn' >Start</button>
-    </Link>
+    <Overlay>
+      <div className="loading-wrapper">
+        <h2>{message}</h2>
+        {!isLoading && <button onClick={() => setPlay(true)}>Start</button>}
+        {play && <Redirect to="/where-is-waldo" />}
+      </div>
+    </Overlay>
   );
 }
 

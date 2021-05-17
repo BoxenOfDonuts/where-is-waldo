@@ -1,8 +1,7 @@
 import { PictureArea } from '../PictureArea/PictureArea';
 import React, { useState, useEffect, useContext } from 'react';
 import { FirebaseContext } from "../Firebase";
-import { Overlay } from '../Overlay/Overlay';
-import { useScoreListener } from '../../hooks/ScoreListener';
+import { NameForm, Overlay } from '../Overlay/Overlay';
 import { FirebaseUtil } from "../Firebase/Firebase.types";
 import { Header } from '../Header/Header';
 import { AppProps, GameProps } from './Game.types';
@@ -23,13 +22,10 @@ const Game: React.FC<GameProps> = ( {inventory, updateInventory} ) => {
   );
 }
 
-
 const Gamebody: React.FC<AppProps> = ({pictures, updateInventory}) => {
   const firebase = useContext<FirebaseUtil>(FirebaseContext);
   const [ gameOver, setGameOver ] = useState<boolean>(false)
   const [ timeToComplete, setTimeToComplete ] = useState<number|null>(null);
-  const [ scores ] = useScoreListener(firebase);
-
 
   useEffect(() => {
     firebase.signIn().then(r =>
@@ -47,7 +43,7 @@ const Gamebody: React.FC<AppProps> = ({pictures, updateInventory}) => {
       firebase.setTime('endTime', Date.now());
       setGameOver(true);
     };
-  }, [pictures]);
+  },[pictures]);
 
   useEffect(() => {
     if (!gameOver) return
@@ -67,7 +63,9 @@ const Gamebody: React.FC<AppProps> = ({pictures, updateInventory}) => {
         pictures={pictures}
         updateInventory={updateInventory}
         />}
-      {gameOver && <Overlay timeToComplete={timeToComplete} leaderboard={scores}/>}      
+      {gameOver && <Overlay>
+          <NameForm timeToComplete={timeToComplete} />
+        </Overlay>}      
   </div>
   );
 }

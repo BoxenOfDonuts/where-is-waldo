@@ -1,33 +1,24 @@
 import React, { useEffect, useRef, useState, useContext } from "react";
 import { Redirect } from "react-router";
-import { Link } from "react-router-dom";
 import { FirebaseContext } from "../Firebase";
 import { FirebaseUtil } from "../Firebase/Firebase.types";
+import { FormProps, OverlayProps } from "./Overlay.types";
 import './Overlay.css';
 
 
-type highScoreArray = [
-  {
-    name: string;
-    score: number;
-    submitTime: {}
-  }
-]
-
-interface OverlayProps {
-  timeToComplete: number|null;
-  score?: number|null;
-  leaderboard?: {name: string, score: string, timestamp: Date}[]
-  resetGame?: () => void;
+const Overlay: React.FC = ({ children }): JSX.Element => {
+  return (
+    <>
+      <div className="blur-background">
+        <div className="popup-wrapper">
+          {children}
+        </div>
+      </div>
+    </>
+  );
 }
 
-interface FormProps {
-  childRef: React.MutableRefObject<any>;
-}
-
-
-
-const Overlay: React.FC<OverlayProps> = ({ leaderboard, timeToComplete, resetGame }): JSX.Element => {
+const NameForm: React.FC<OverlayProps> = ({ timeToComplete }): JSX.Element => {
   const [ didSubmit, setDidSubmit ] = useState<boolean>(false);
   const firebase = useContext<FirebaseUtil>(FirebaseContext);
 
@@ -41,42 +32,13 @@ const Overlay: React.FC<OverlayProps> = ({ leaderboard, timeToComplete, resetGam
     }
 
   }
-
-  let content = <></>;
-  if (!didSubmit) {
-    content = (
-      <>
-        <p>{`Time Taken: ${timeToComplete} seconds!`}</p>
-        <Form childRef={formRef}/>
-        <button onClick={resetGame}>{'Cancel'}</button>
-        {/* <Link to="/leaderboard" >
-          <button onClick={handleFormSubmit}>{'Submit'}</button>
-        </Link> */}
-        <button onClick={handleFormSubmit}>{'Submit'}</button>
-
-      </>
-    )
-  } else {
-    content = (
-      <>
-        {didSubmit && <Redirect to="/leaderboard" /> }
-        <ul className="leader-board">
-          {leaderboard?.map(value => {
-            const { name, score, timestamp } = value;
-            return <LeaderBoardItem key={timestamp} name={name} score={score} />
-          })}
-        </ul>
-      </>
-    )
-  }
-
   return (
     <>
-      <div className="blur-background">
-        <div className="popup-wrapper" style={{position: 'absolute', zIndex: 2, top: '25%', left: '50%', backgroundColor: 'white'}}>
-          {content}
-        </div>
-      </div>
+      {didSubmit && <Redirect to="/leaderboard" /> }
+      <p>{`Time Taken: ${timeToComplete} seconds!`}</p>
+      <Form childRef={formRef}/>
+      <button onClick={() => setDidSubmit(true)}>{'Cancel'}</button>
+      <button onClick={handleFormSubmit}>{'Submit'}</button>
     </>
   );
 }
@@ -124,17 +86,4 @@ const Input: React.FC<any> = ({ InitialValue, autoTab, initialKey, handleChange 
   );
 }
 
-const LeaderBoardItem: React.FC<any> = ({ name, score }): JSX.Element => {
-  return (
-    <li className="score-item">
-      <div className="names">
-        {name}
-      </div>
-      <div className="score">
-        {score}
-      </div>
-    </li>
-  );
-}
-
-export { Overlay };
+export { Overlay, NameForm };

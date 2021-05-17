@@ -12,6 +12,7 @@ export const PictureArea: React.FC<AppProps> = React.memo(({ pictures, updateInv
   
   const didHit = (x:number ,y: number, guess: string ): boolean => {
     // return if somehow not in the dict
+    console.log('did hit ran')
     if (pictures[guess] === undefined) {
       console.error("Guess Doesn't Exist");
       return false;
@@ -21,9 +22,11 @@ export const PictureArea: React.FC<AppProps> = React.memo(({ pictures, updateInv
     if ((y >= picture.yStart && y <= picture.yEnd) && (x >= picture.xStart && x <= picture.xEnd)) {
       console.log(`hit the box! ${picture.name}`);
         // return true;
+        console.log('true')
         updateInventory(picture.name);
         return true;
     }
+    console.log('false')
     return false;
   }
 
@@ -31,7 +34,7 @@ export const PictureArea: React.FC<AppProps> = React.memo(({ pictures, updateInv
     // const [x, y] = [e.clientX, e.clientY];
     const [ x, y ] = guessLocation; 
     console.log(x, y);
-    console.log(didHit(x,y, guess));
+    didHit(x,y, guess);
     // setClickedCoordinates([0,0]);
   };
 
@@ -46,6 +49,7 @@ export const PictureArea: React.FC<AppProps> = React.memo(({ pictures, updateInv
     const [x , y] = calculateOffset(e.clientX, e.clientY, e.currentTarget.getBoundingClientRect());
     const xPercent: number = Math.round(x / e.currentTarget.offsetWidth * 100); // percent x location instead of by pixel
     const yPercent: number = Math.round(y / e.currentTarget.offsetHeight * 100); // percent y location instead of by pixel
+    console.log(x, y)
     setClickedCoordinates([x, y]);
     setGuessLocation([xPercent, yPercent]);
   }
